@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Friend Finder | Survey</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+  <script src="sweetalert2/sweetalert2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="sweetalert2/sweetalert2.css">
+</head>
+<body>
+
+    <div class="container">
+  		<h2>Survey Questions</h2>
+  		<hr>
+  		<h3>About You
+  		</h3>
+  		<h4>Name (Required)</h4>
+  		<input type="text" id="name" class="form-control" required>
+  		<h4>Link to profile image (Required)</h4>
+  		<input type="text" id="profilePic" class="form-control" required>
+  		<hr>
+  			<form role="form">
+  			    <div class="form-group">
+  				      	<label for="q1"><h3>Question 1</h3><h4>Your mind is always buzzing with unexplored ideas and plans.</h4></label>
+  				      	<select class="form-control" id="q1" style="width: 300px">
+                  <option value="" selected disabled>Select an Option</option>
+  				        <option value="1">1 (Strongly Disagree)</option>
+  				        <option value="2">2</option>
+  				        <option value="3">3</option>
+  				        <option value="4">4</option>
+  				        <option value="5">5 (Strongly Agree)</option>
+  				      	</select>
+  			      	<br>
+  			      	<hr>
+                <label for="q2"><h3>Question 2</h3><h4>You put Sriracha sauce on everything.</h4></label>
+                <select class="form-control" id="q2" style="width: 300px">
+                <option value="" selected disabled>Select an Option</option>
+                <option value="1">1 (Strongly Disagree)</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5 (Strongly Agree)</option>
+                </select>
+              <br>
+              <hr>
+              <label for="q3"><h3>Question 3</h3><h4>You run for fun.</h4></label>
+              <select class="form-control" id="q3" style="width: 300px">
+              <option value="" selected disabled>Select an Option</option>
+              <option value="1">1 (Strongly Disagree)</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5 (Strongly Agree)</option>
+              </select>
+            <br>
+            <hr>
+            <label for="q4"><h3>Question 4</h3><h4>Generally speaking, you rely more on your experience than your imagination.</h4></label>
+            <select class="form-control" id="q4" style="width: 300px">
+            <option value="" selected disabled>Select an Option</option>
+            <option value="1">1 (Strongly Disagree)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (Strongly Agree)</option>
+            </select>
+          <br>
+          <hr>
+          <label for="q5"><h3>Question 5</h3><h4>You rarely get carried away by fantasies and ideas.</h4></label>
+          <select class="form-control" id="q5" style="width: 300px">
+          <option value="" selected disabled>Select an Option</option>
+          <option value="1">1 (Strongly Disagree)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5 (Strongly Agree)</option>
+          </select>
+        <br>
+        <hr>
+  			    </div>
+  			</form>
+  			<br>
+  			<button type="submit" class="btn btn-primary btn-lg" id="surveySubmit"><i class="fa  fa-check-square-o"></i> Submit Answers</button>
+  	</div>
+
+
+
+
+    <footer class="footer">
+      <div class="container">
+        <p><a href="http://www.ajheinke.com">Andrew Heinke</a> &copy; 2016 | <a href="https://github.com/AndrewHeinke/FriendFinder">GitHub Repo</a></p>
+      </div>
+    </footer>
+
+	</div>
+
+  <script type="text/javascript">
+
+
+
+    $('#surveySubmit').on("click", function() {
+  		var userName = $('#name').val().length;
+  		var userImage = $('#profilePic').val().length;
+  		if(userName === 0 || userImage === 0) {
+        swal(
+          'Oops!',
+          'Please enter information for your name and photo url!',
+          'error'
+        );
+  		} else {
+    			var userInput = {
+    				name: $('#name').val(),
+    				photo: $('#profilePic').val(),
+    				scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val()]
+    			}
+    			console.log(userInput);
+          var currentURL = window.location.origin;
+    			$.post(currentURL, + "api/new", userInput)
+            .done(function(data) {
+    	        console.log(data);
+    	    });
+          $('#name').val("");
+          $('#profilePic').val("");
+          $('#q1').val("");
+          $('#q2').val("");
+          $('#q3').val("");
+          $('#q4').val("");
+          $('#q5').val("");
+          swal(
+            'Success!',
+            'Your survey information has been submitted.',
+            'success'
+          );
+  	    }
+
+      return false;
+  	});
+  </script>
+</body>
+</html>
