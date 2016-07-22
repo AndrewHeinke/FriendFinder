@@ -8,8 +8,8 @@
 	<script src="https://code.jquery.com/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-  <script src="sweetalert2/sweetalert2.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="sweetalert2/sweetalert2.css">
+  <script src="public/sweetalert2/sweetalert2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="public/sweetalert2/sweetalert2.css">
 </head>
 <body>
     <div class="container">
@@ -136,7 +136,7 @@
   			    </div>
   			</form>
         <div class="">
-          <button type="submit" class="btn btn-primary btn-lg" id="surveySubmit"><i class="fa fa-check-square-o"></i> Submit Answers</button>
+          <button type="submit" class="btn btn-primary btn-lg" id="submit"><i class="fa fa-check-square-o"></i> Submit Answers</button>
         </div>
         <br>
         <hr>
@@ -151,7 +151,7 @@
 	</div>
 
   <script type="text/javascript">
-    $('#surveySubmit').on("click", function() {
+    $('#submit').on("click", function() {
   		var userName = $('#name').val().length;
   		var userImage = $('#profilePic').val().length;
   		if(userName === 0 || userImage === 0) {
@@ -161,16 +161,21 @@
           'error'
         );
   		} else {
-    			var userInput = {
+    			var inputData = {
     				name: $('#name').val(),
     				photo: $('#profilePic').val(),
     				scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(),$("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
     			}
-    			console.log(userInput);
           var currentURL = window.location.origin;
-    			$.post(currentURL, + "api/new", userInput)
-            .done(function(data) {
-    	        console.log(data);
+    			$.post(currentURL, + "api/friends", inputData, function(data) {
+						$('.nameMatch').text(data.name);
+						$('.imageMatch').attr("src", data.photo);
+						// swal({
+						// 	  title: 'jQuery HTML example',
+						// 	  html: $('<div>')
+						// 	    .addClass('nameMatch'),
+						// 			$('<div>').addClass('imageMatch')
+						// 	});
     	    });
           $('#name').val("");
           $('#profilePic').val("");
@@ -179,11 +184,11 @@
           $('#q3').val("");
           $('#q4').val("");
           $('#q5').val("");
-          swal(
-            'Success!',
-            'Your survey information has been submitted.',
-            'success'
-          );
+					$('#q6').val("");
+          $('#q7').val("");
+          $('#q8').val("");
+          $('#q9').val("");
+          $('#q10').val("");
   	    }
       return false;
   	});
