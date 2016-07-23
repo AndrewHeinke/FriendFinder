@@ -8,21 +8,19 @@
 	<script src="https://code.jquery.com/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-  <script src="public/sweetalert2/sweetalert2.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="public/sweetalert2/sweetalert2.css">
+	<link rel="stylesheet" type="text/css" href="public/style.css">
 </head>
 <body>
     <div class="container">
   		<h2>Survey Questions</h2>
   		<hr>
-  		<h3>About You
-  		</h3>
-  		<h4>Name (Required)</h4>
-  		<input type="text" id="name" class="form-control" required>
-  		<h4>Link to profile image (Required)</h4>
-  		<input type="text" id="profilePic" class="form-control" required>
-  		<hr>
-  			<form role="form">
+  			<form role="form" action="/api/friends">
+					<h3>About You</h3>
+		  		<h4>Name (Required)</h4>
+		  		<input type="text" id="name" class="form-control" required>
+		  		<h4>Link to profile image (Required)</h4>
+		  		<input type="text" id="profilePic" class="form-control" required>
+		  		<hr>
   			    <div class="form-group">
   		      	<label for="q1"><h3>Question 1</h3><h4>Your mind is always buzzing with unexplored ideas and plans.</h4></label>
   		      	<select class="form-control" id="q1" style="width: 300px">
@@ -149,48 +147,48 @@
     </footer>
 
 	</div>
-
+	<!-- modal pop up -->
+	<div id="friendMatchModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">X</button>
+				<h2 class="modal-title">Your Friend Match</h2>
+			</div>
+			<div class="modal-body">
+				<h2 id="friendMatchName"></h2>
+				<img id="friendMatchImage" src="https://s3.amazonaws.com/uifaces/faces/twitter/jonohunt/128.jpg" width=500px>
+			</div>
+		</div>
+	</div>
+</div>
   <script type="text/javascript">
     $('#submit').on("click", function() {
-  		var userName = $('#name').val().length;
-  		var userImage = $('#profilePic').val().length;
-  		if(userName === 0 || userImage === 0) {
-        swal(
-          'Oops!',
-          'Please enter information for your name and photo url!',
-          'error'
-        );
-  		} else {
-    			var inputData = {
-    				name: $('#name').val(),
-    				photo: $('#profilePic').val(),
-    				scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(),$("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
-    			}
-          var currentURL = window.location.origin;
-    			$.post(currentURL, + "api/friends", inputData, function(data) {
-						$('.nameMatch').text(data.name);
-						$('.imageMatch').attr("src", data.photo);
-						// swal({
-						// 	  title: 'jQuery HTML example',
-						// 	  html: $('<div>')
-						// 	    .addClass('nameMatch'),
-						// 			$('<div>').addClass('imageMatch')
-						// 	});
-    	    });
-          $('#name').val("");
-          $('#profilePic').val("");
-          $('#q1').val("");
-          $('#q2').val("");
-          $('#q3').val("");
-          $('#q4').val("");
-          $('#q5').val("");
-					$('#q6').val("");
-          $('#q7').val("");
-          $('#q8').val("");
-          $('#q9').val("");
-          $('#q10').val("");
-  	    }
-      return false;
+  			var inputData = {
+  				name: $('#name').val(),
+  				photo: $('#profilePic').val(),
+  				scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(),$("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
+  			}
+        var currentURL = window.location.origin;
+  			$.post(currentURL, + "/api/friends", inputData, function(data) {
+					$("#friendMatchName").text(data.name);
+					$("#friendMatchImage").attr("src", data.photo);
+					$("#friendMatchModal").openModal();
+  	    });
+        $('#name').val("");
+        $('#profilePic').val("");
+        $('#q1').val("");
+        $('#q2').val("");
+        $('#q3').val("");
+        $('#q4').val("");
+        $('#q5').val("");
+				$('#q6').val("");
+        $('#q7').val("");
+        $('#q8').val("");
+        $('#q9').val("");
+        $('#q10').val("");
+	    
+    return false;
   	});
   </script>
 

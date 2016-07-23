@@ -6,30 +6,34 @@ module.exports = function(app) {
   app.get("/api/friends", function (req, res) {
     res.json(friendsList);
   });
-  // need to fix post 
+
   app.post("/api/friends", function (req, res) {
     var user = req.body;
     var userIndex = 0;
     var diffArray = [];
-    while (userIndex < userArray.length) {
-      var difference = 0;
-      for (var i = 0; i < user.scores.length; i++ ) {
-        difference += Math.abs(parseInt(userArray[userIndex].scores[i]) - parserInt(user.scores[i]));
-      }
-      diffArray.push(difference);
-      userIndex++;
-    }
-    console.log("Differences: " + diffArray);
+    var inputScores = req.body.score;
 
-    var low = diffArray[0];
-    for (var j = 0; j < diffArray.length; j++) {
-      if (diffArray[j] < low) {
-        low = diffArray[j];
+    for (var i = 0; i < friendsList.length-1; i++) {
+      var iteratedUser = friendsList[i].score;
+      var totalDiff = 0;
+      for (var j = 0; j < inputScores.length; j ++) {
+        var sum = Math.abs(parseInt(inputScores[j]) - parseInt(iteratedUser[j]));
+        totalDiff += sum;
       }
+      diffArray.push(totalDiff);
     }
-     var chosenFriend = diffArray.indexOf(low);
+    function indexLowest(low) {
+      var lowest = 0;
+      for (var i = 1; i < low.length; i++) {
+        if (low[i] < low[lowest]) {
+          lowest = i;
+        }
+        return lowest;
+      }
+      var returnedIndex = indexLowest(diffArray);
+    }
+    res.json(friendsList[returnedIndex]);
 
-    res.json(chosenFriend);
-    friendsList.push(user);
+
   });
 };
